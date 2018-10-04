@@ -14,6 +14,9 @@ function parseJSON(bytes, callback) {
 }
 
 const ipldLoaders = {
+	"raw"(value, callback) {
+		parseJSON(value, callback)
+	},
 	"dag-pb"(value, callback) {
 		parseJSON(value.data, callback)
 	},

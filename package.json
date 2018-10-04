@@ -1,6 +1,6 @@
 {
   "name": "jsonld-dweb-loader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JSON-LD document loader for IPFS and IPLD URIs",
   "main": "index.js",
   "scripts": {

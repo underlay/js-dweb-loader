@@ -10,6 +10,8 @@ JSON-LD document loader for IPFS and IPLD
 }
 ```
 
+<<< [Golang implementation](https://gist.github.com/joeltg/0cdbe1e058197b0058e9f8ea8dbbd7e9) >>>
+
 ## Motivation
 
 Suppose you have some JSON-LD, like this example taken from the [W3C Security Vocabulary](https://web-payments.org/vocabs/security#Digest):

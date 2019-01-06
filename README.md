@@ -1,6 +1,17 @@
 # jsonld-dweb-loader
 JSON-LD document loader for IPFS and IPLD
 
+```json
+{
+  "@context": "dweb:/ipfs/QmUFeUYXqyKa1mXLyfiCkm1MDbwYPTFBpyKvW7Nhy98Ks1",
+  "@type": "Digest",
+  "digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1",
+  "digestValue": "981ec496092bf6ee18d6255d96069b528633268b"
+}
+```
+
+<<< [Golang implementation](https://gist.github.com/joeltg/0cdbe1e058197b0058e9f8ea8dbbd7e9) >>>
+
 ## Motivation
 
 Suppose you have some JSON-LD, like this example taken from the [W3C Security Vocabulary](https://web-payments.org/vocabs/security#Digest):

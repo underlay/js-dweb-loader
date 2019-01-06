@@ -1,28 +1,28 @@
 {
-  "name": "jsonld-dweb-loader",
-  "version": "1.0.1",
-  "description": "JSON-LD document loader for IPFS and IPLD URIs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/underlay/jsonld-dweb-loader.git"
-  },
-  "keywords": [
-    "ipfs",
-    "ipld",
-    "dweb",
-    "jsonld"
-  ],
-  "author": "Joel Gustafson",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/underlay/jsonld-dweb-loader/issues"
-  },
-  "homepage": "https://github.com/underlay/jsonld-dweb-loader#readme",
-  "dependencies": {
-    "cids": "^0.5.5"
-  }
+	"name": "jsonld-dweb-loader",
+	"version": "1.0.1",
+	"description": "JSON-LD document loader for IPFS and IPLD URIs",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/underlay/jsonld-dweb-loader.git"
+	},
+	"keywords": [
+		"ipfs",
+		"ipld",
+		"dweb",
+		"jsonld"
+	],
+	"author": "Joel Gustafson",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/underlay/jsonld-dweb-loader/issues"
+	},
+	"homepage": "https://github.com/underlay/jsonld-dweb-loader#readme",
+	"dependencies": {
+		"cids": "^0.5.7"
+	}
 }

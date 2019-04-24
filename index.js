@@ -2,14 +2,14 @@ const CID = require("cids")
 
 function parseJSON(bytes, callback) {
 	const string = bytes.toString("utf8")
-	let res = null,
+	let value = null,
 		error = null
 	try {
-		res = { document: JSON.parse(string) }
+		value = { document: JSON.parse(string) }
 	} catch (e) {
 		error = e
 	} finally {
-		callback(error, res)
+		callback(error, value)
 	}
 }
 
@@ -23,42 +23,56 @@ const ipldLoaders = {
 	"dag-cbor"(value, callback) {
 		callback(null, { document: value })
 	},
+	"dag-json"(value, callback) {
+		callback(null, { document: value })
+	},
 }
 
-const documentLoaders = {
-	"ipfs://"(ipfs, path, callback) {
-		ipfs.files.cat(path, (err, bytes) => {
+function ipldLoader(ipfs, path, callback) {
+	let cid
+	try {
+		cid = new CID(path)
+	} catch (e) {
+		callback(e)
+	}
+	if (ipldLoaders.hasOwnProperty(cid.codec)) {
+		ipfs.dag.get(path, (err, { value }) => {
 			if (err) {
 				callback(err)
 			} else {
-				parseJSON(bytes, callback)
+				ipldLoaders[cid.codec](value, callback)
 			}
 		})
-	},
-	"dweb:/ipfs/"(ipfs, path, callback) {
-		let cid
-		try {
-			cid = new CID(path)
-		} catch (e) {
-			callback(e)
-		}
-		if (ipldLoaders.hasOwnProperty(cid.codec)) {
-			ipfs.dag.get(path, (err, { value }) => {
-				if (err) callback(err)
-				else ipldLoaders[cid.codec](value, callback)
-			})
-		} else {
-			callback(new Error("Unrecognized IPLD format"))
-		}
-	},
+	} else {
+		callback(new Error("Unsupported IPLD codecc"))
+	}
 }
 
-const keys = Object.keys(documentLoaders)
+function ipfsLoader(ipfs, path, callback) {
+	ipfs.cat(path, (err, bytes) => {
+		if (err) {
+			callback(err)
+		} else {
+			parseJSON(bytes, callback)
+		}
+	})
+}
 
+const documentLoaders = {
+	"ipld://": ipldLoader,
+	"dweb:/ipld/": ipldLoader,
+	"ipfs://": ipfsLoader,
+	"dweb:/ipfs/": ipfsLoader,
+}
+
+const prefixes = Object.keys(documentLoaders)
 const getDocumentLoader = ipfs => (url, callback) => {
-	const key = keys.find(key => url.indexOf(key) === 0)
-	if (key) documentLoaders[key](ipfs, url.slice(key.length), callback)
-	else callback(new Error("Could not load document", url))
+	const prefix = prefixes.find(prefix => url.indexOf(prefix) === 0)
+	if (prefix) {
+		documentLoaders[prefix](ipfs, url.slice(prefix.length), callback)
+	} else {
+		callback(new Error("Could not load document", url))
+	}
 }
 
 module.exports = getDocumentLoader

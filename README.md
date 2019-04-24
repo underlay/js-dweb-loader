@@ -1,12 +1,13 @@
 # jsonld-dweb-loader
+
 JSON-LD document loader for IPFS and IPLD
 
 ```json
 {
-  "@context": "dweb:/ipfs/QmUFeUYXqyKa1mXLyfiCkm1MDbwYPTFBpyKvW7Nhy98Ks1",
-  "@type": "Digest",
-  "digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1",
-  "digestValue": "981ec496092bf6ee18d6255d96069b528633268b"
+	"@context": "dweb:/ipfs/QmUFeUYXqyKa1mXLyfiCkm1MDbwYPTFBpyKvW7Nhy98Ks1",
+	"@type": "Digest",
+	"digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1",
+	"digestValue": "981ec496092bf6ee18d6255d96069b528633268b"
 }
 ```
 
@@ -15,12 +16,13 @@ JSON-LD document loader for IPFS and IPLD
 ## Motivation
 
 Suppose you have some JSON-LD, like this example taken from the [W3C Security Vocabulary](https://web-payments.org/vocabs/security#Digest):
+
 ```json
 {
-  "@context": "https://w3id.org/security/v1",
-  "@type": "Digest",
-  "digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1",
-  "digestValue": "981ec496092bf6ee18d6255d96069b528633268b"
+	"@context": "https://w3id.org/security/v1",
+	"@type": "Digest",
+	"digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1",
+	"digestValue": "981ec496092bf6ee18d6255d96069b528633268b"
 }
 ```
 
@@ -68,16 +70,17 @@ Then I rename my JSON-LD document to reference the IPFS URI:
 
 ```json
 {
-  "@context": "dweb:/ipfs/QmUFeUYXqyKa1mXLyfiCkm1MDbwYPTFBpyKvW7Nhy98Ks1",
-  "@type": "Digest",
-  "digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1",
-  "digestValue": "981ec496092bf6ee18d6255d96069b528633268b"
+	"@context": "dweb:/ipfs/QmUFeUYXqyKa1mXLyfiCkm1MDbwYPTFBpyKvW7Nhy98Ks1",
+	"@type": "Digest",
+	"digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1",
+	"digestValue": "981ec496092bf6ee18d6255d96069b528633268b"
 }
 ```
 
 Let's even add _that_ document to IPFS, just for fun:
+
 ```
-joel$ ipfs add sample.jsonld 
+joel$ ipfs add sample.jsonld
 added QmXjY3nz81qG99vbMF4Tb2NeSFmUdWBUG7ecYVtvnGxrXt sample.jsonld
 joel$ ipfs cat QmXjY3nz81qG99vbMF4Tb2NeSFmUdWBUG7ecYVtvnGxrXt
 {
@@ -89,6 +92,7 @@ joel$ ipfs cat QmXjY3nz81qG99vbMF4Tb2NeSFmUdWBUG7ecYVtvnGxrXt
 ```
 
 Then unleash the magic!
+
 ```javascript
 const createDocumentLoader = require("jsonld-dweb-loader")
 const IPFS = require("ipfs")
@@ -96,17 +100,23 @@ const jsonld = require("jsonld")
 
 const ipfs = new IPFS({})
 ipfs.on("ready", () => {
-  const doc = "dweb:/ipfs/QmXjY3nz81qG99vbMF4Tb2NeSFmUdWBUG7ecYVtvnGxrXt"
-  const documentLoader = createDocumentLoader(ipfs)
-  jsonld.expand(doc, { documentLoader }, (err, expanded) => {
-    console.log(err, JSON.stringify(expanded))
-    process.exit()
-  })
+	const doc = "dweb:/ipfs/QmXjY3nz81qG99vbMF4Tb2NeSFmUdWBUG7ecYVtvnGxrXt"
+	const documentLoader = createDocumentLoader(ipfs)
+	jsonld.expand(doc, { documentLoader }, (err, expanded) => {
+		console.log(err, JSON.stringify(expanded))
+		process.exit()
+	})
 })
 ```
 
 ```
-joel$ node test.js 
+joel$ node test.js
 ...
 [{"@type":["/Digest"],"https://w3id.org/security#digestAlgorithm":[{"@value":"http://www.w3.org/2000/09/xmldsig#sha1"}],"https://w3id.org/security#digestValue":[{"@value":"981ec496092bf6ee18d6255d96069b528633268b"}]}]
 ```
+
+## Support
+
+This loader supports JSON-encoded contexts and documents on IPFS under the `dweb:/ipfs/` and `ipfs://` URI schemes (the loader will atempt to parse those files into JSON and will throw an error if that fails), as well as the `dag-cbor`, `dag-json`, `dab-pb`, and `raw` IPLD formats.
+
+`dag-cbor` and `dag-json` both deserialize directly to JSON objects, which are used directly. This loader will attempt to parse `dab-pb` and `raw` blocks as JSON and will throw an error if unsuccessful.

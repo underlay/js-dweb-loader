@@ -111,8 +111,25 @@ ipfs.on("ready", () => {
 
 ```
 joel$ node test.js
-...
-[{"@type":["/Digest"],"https://w3id.org/security#digestAlgorithm":[{"@value":"http://www.w3.org/2000/09/xmldsig#sha1"}],"https://w3id.org/security#digestValue":[{"@value":"981ec496092bf6ee18d6255d96069b528633268b"}]}]
+context: dweb:/ipld/zdpuB2s6SPPu2TPv6RBUY7FhJkghnYfc7dDvz5Luyw4wosde1
+document: ipfs://QmPm5sCx6HLSmdJHFrozmsVNxC6mrE3VMHH7XuTQmtqUuA
+{
+  "@context": "dweb:/ipld/zdpuB2s6SPPu2TPv6RBUY7FhJkghnYfc7dDvz5Luyw4wosde1",
+  "@graph": [
+    {
+      "@type": "schema:Person",
+      "schema:knows": {
+        "@type": "schema:Person",
+        "schema:name": "Bob"
+      },
+      "schema:name": "Alice"
+    }
+  ],
+  "prov:wasAttributedTo": {
+    "@type": "schema:Person",
+    "schema:name": "Eve"
+  }
+}
 ```
 
 ## Support

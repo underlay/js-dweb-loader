@@ -1,33 +1,5 @@
 const CID = require("cids")
 
-function parseJSON(bytes, callback) {
-	const string = bytes.toString("utf8")
-	let value = null,
-		error = null
-	try {
-		value = { document: JSON.parse(string) }
-	} catch (e) {
-		error = e
-	} finally {
-		callback(error, value)
-	}
-}
-
-const ipldLoaders = {
-	raw(value, callback) {
-		parseJSON(value, callback)
-	},
-	"dag-pb"(value, callback) {
-		parseJSON(value.data, callback)
-	},
-	"dag-cbor"(value, callback) {
-		callback(null, { document: value })
-	},
-	"dag-json"(value, callback) {
-		callback(null, { document: value })
-	},
-}
-
 function ipldLoader(ipfs, path, callback) {
 	let cid
 	try {
@@ -35,12 +7,12 @@ function ipldLoader(ipfs, path, callback) {
 	} catch (e) {
 		callback(e)
 	}
-	if (ipldLoaders.hasOwnProperty(cid.codec)) {
+	if (cid.codec === "dag-cbor" || cid.codec === "dag-json") {
 		ipfs.dag.get(path, (err, { value }) => {
 			if (err) {
 				callback(err)
 			} else {
-				ipldLoaders[cid.codec](value, callback)
+				callback(null, { document: value })
 			}
 		})
 	} else {
@@ -53,7 +25,16 @@ function ipfsLoader(ipfs, path, callback) {
 		if (err) {
 			callback(err)
 		} else {
-			parseJSON(bytes, callback)
+			const string = bytes.toString("utf8")
+			let value = null,
+				error = null
+			try {
+				value = { document: JSON.parse(string) }
+			} catch (e) {
+				error = e
+			} finally {
+				callback(error, value)
+			}
 		}
 	})
 }

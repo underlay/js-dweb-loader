@@ -134,6 +134,4 @@ document: ipfs://QmPm5sCx6HLSmdJHFrozmsVNxC6mrE3VMHH7XuTQmtqUuA
 
 ## Support
 
-This loader supports JSON-encoded contexts and documents on IPFS under the `dweb:/ipfs/` and `ipfs://` URI schemes (the loader will atempt to parse those files into JSON and will throw an error if that fails), as well as the `dag-cbor`, `dag-json`, `dab-pb`, and `raw` IPLD formats.
-
-`dag-cbor` and `dag-json` both deserialize directly to JSON objects, which are used directly. This loader will attempt to parse `dab-pb` and `raw` blocks as JSON and will throw an error if unsuccessful.
+This loader supports JSON-encoded contexts and documents on IPFS under the `dweb:/ipfs/` and `ipfs://` URI schemes (the loader will atempt to parse those files as JSON and will throw an error if that fails), as well as the `dag-cbor` and `dag-json` IPLD formats, which deserialize directly to JSON.

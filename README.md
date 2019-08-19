@@ -1,4 +1,4 @@
-# jsonld-dweb-loader
+# dweb-loader
 
 JSON-LD document loader for IPFS and IPLD
 
@@ -94,7 +94,7 @@ joel$ ipfs cat QmXjY3nz81qG99vbMF4Tb2NeSFmUdWBUG7ecYVtvnGxrXt
 Then unleash the magic!
 
 ```javascript
-const createDocumentLoader = require("jsonld-dweb-loader")
+const createDocumentLoader = require("dweb-loader")
 const IPFS = require("ipfs")
 const jsonld = require("jsonld")
 

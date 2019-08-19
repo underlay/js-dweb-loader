@@ -1,6 +1,6 @@
 {
-	"name": "jsonld-dweb-loader",
-	"version": "1.2.0",
+	"name": "dweb-loader",
+	"version": "1.2.1",
 	"description": "JSON-LD document loader for IPFS and IPLD URIs",
 	"main": "index.js",
 	"scripts": {
@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/underlay/jsonld-dweb-loader.git"
+		"url": "git+https://github.com/underlay/dweb-loader.git"
 	},
 	"keywords": [
 		"ipfs",
@@ -19,9 +19,9 @@
 	"author": "Joel Gustafson",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/underlay/jsonld-dweb-loader/issues"
+		"url": "https://github.com/underlay/dweb-loader/issues"
 	},
-	"homepage": "https://github.com/underlay/jsonld-dweb-loader#readme",
+	"homepage": "https://github.com/underlay/dweb-loader#readme",
 	"dependencies": {
 		"cids": "^0.7.1"
 	},

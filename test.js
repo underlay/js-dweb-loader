@@ -2,12 +2,8 @@ const jsonld = require("jsonld")
 const IPFS = require("ipfs-http-client")
 const { Buffer } = IPFS
 
-const createDocumentLoader = require("./index.js")
-
 const ipfs = IPFS()
-const documentLoader = createDocumentLoader(ipfs)
-
-jsonld.documentLoader = documentLoader
+const documentLoader = require("./index.js")(ipfs)
 
 const context = {
 	schema: "http://schema.org/",
@@ -38,8 +34,11 @@ ipfs.dag.put(context).then(cid => {
 		const docUri = `ipfs://${hash}`
 		console.log("document:", docUri)
 		jsonld
-			.expand(docUri)
-			.then(expanded => jsonld.compact(expanded, contextUri))
+			.expand(docUri, { documentLoader })
+			.then(expanded => {
+				console.log("expanded", expanded)
+				jsonld.compact(expanded, contextUri, {documentLoader})
+			})
 			.then(result => {
 				console.log(JSON.stringify(result, null, "  "))
 				process.exit()

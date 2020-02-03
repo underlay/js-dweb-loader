@@ -1,42 +1,16 @@
 const CID = require("cids")
 
-function ipldLoader(ipfs, path, callback) {
-	let cid
-	try {
-		cid = new CID(path)
-	} catch (e) {
-		callback(e)
-	}
-	if (cid.codec === "dag-cbor" || cid.codec === "dag-json") {
-		ipfs.dag.get(path, (err, { value }) => {
-			if (err) {
-				callback(err)
-			} else {
-				callback(null, { document: value })
-			}
-		})
+async function ipldLoader(ipfs, path) {
+	const cid = new CID(path)
+	if (cid.codec === "dag-cbor") {
+		return ipfs.dag.get(path).then(({ value }) => ({ document: value }))
 	} else {
-		callback(new Error("Unsupported IPLD codecc"))
+		throw new Error("Unsupported IPLD codec")
 	}
 }
 
-function ipfsLoader(ipfs, path, callback) {
-	ipfs.cat(path, (err, bytes) => {
-		if (err) {
-			callback(err)
-		} else {
-			const string = bytes.toString("utf8")
-			let value = null,
-				error = null
-			try {
-				value = { document: JSON.parse(string) }
-			} catch (e) {
-				error = e
-			} finally {
-				callback(error, value)
-			}
-		}
-	})
+function ipfsLoader(ipfs, path) {
+	return ipfs.cat(path).then(bytes => ({ document: JSON.parse(bytes) }))
 }
 
 const documentLoaders = {
@@ -47,13 +21,12 @@ const documentLoaders = {
 }
 
 const prefixes = Object.keys(documentLoaders)
-const getDocumentLoader = ipfs => (url, callback) => {
+
+module.exports = ipfs => async (url, options) => {
 	const prefix = prefixes.find(prefix => url.indexOf(prefix) === 0)
 	if (prefix) {
-		documentLoaders[prefix](ipfs, url.slice(prefix.length), callback)
+		return documentLoaders[prefix](ipfs, url.slice(prefix.length))
 	} else {
-		callback(new Error("Could not load document", url))
+		throw new Error("Could not load document", url)
 	}
 }
-
-module.exports = getDocumentLoader

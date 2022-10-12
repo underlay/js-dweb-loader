@@ -27,6 +27,6 @@
 	},
 	"devDependencies": {
 		"ipfs-http-client": "^40.2.1",
-		"jsonld": "^2.0.2"
+		"jsonld": "^8.1.0"
 	}
 }
